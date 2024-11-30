@@ -14,7 +14,7 @@ npx create-next-app@latest nextjs-dashboard --example "https://github.com/vercel
 
 ### 프로젝트의 폴더 구조
 
-![alt text](image.png)
+![alt text](./images/image.png)
 - /app : 애플리케이션의 모든 Route, Component, Logic을 포함하며, 대부분 이곳에서 작업하게 됩니다.
 - /app/lib : 재사용 가능한 유틸리티 함수 및 데이터 가져오기 함수 등 애플리케이션에서 사용되는 함수를 포함합니다.
 - /app/ui : 애플리케이션의 모든 ui를 포함합니다. 
@@ -42,5 +42,5 @@ pnpm dev
 
 다음과 같은 모습이 나오면 1챕터를 완료한 것입니다.
 
-![alt text](image-1.png)
+![alt text](./images/image-1.png)
 

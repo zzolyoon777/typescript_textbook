@@ -2,7 +2,7 @@
 
 ### 이 장에서 다룰 주제는 다음과 같습니다. (현재 프로젝트에 CSS가 없습니다.)
 
-![alt text](image-2.png)
+![alt text](./images/image-2.png)
 
 ---
 
@@ -11,16 +11,16 @@
 Next.js에서 한 파일로 모든 컴포넌트에 CSS를 적용하고 싶다면, 다음과 같이 해주세요 :
 
 1. global.css를 루트 레이아웃인 layout.tsx에 임포트
-   ![alt text](image-3.png)
+   ![alt text](./images/image-3.png)
 
 2. 저장한 후, 홈페이지가 다음과 같이 보이면 정상입니다.
-   ![alt text](image-4.png)
+   ![alt text](./images/image-4.png)
 
 _😑 흠, CSS 규칙을 추가하지 않았는데 스타일은 어디에서 온걸까요?_
 
 - 정답은 @tailwind 주석에 있습니다.
 
-![alt text](image-5.png)
+![alt text](./images/image-5.png)
 
 ---
 
@@ -78,7 +78,7 @@ export default function Page() {
 ```
 
 3. 서버를 시작하여 화면을 확인해 삼각형이 그대로 존재하는지 확인합니다.
-   ![alt text](image-6.png)
+   ![alt text](./images/image-6.png)
 
 ---
 
