@@ -427,3 +427,148 @@ const circle: Money = liter;
 ```
 
 ### 이렇게, 객체를 어떻게 만들었든 간에 구조가 같으면 같은 객체로 인식하는 것을 구조적 타이핑(structural typing)이라고 부릅니다.
+
+---
+
+### 그럼 서로 대입하지 못하게, 구조적 타이핑이 맞지 않도록 하려면 서로를 구분하기 위한 속성을 추가해야 합니다. 다른 속성과 겹치지 않는 이름으로 대표적으로 __type이 있습니다. 이를 브랜드 속성이라고 부르고, 브랜드 속성을 사용하는 것을 '브랜딩'이라고 부릅니다.
+```typescript
+interface Money {
+    __type: 'money';
+    amount: number;
+    unit: string;
+};
+
+interface Liter {
+    __type: 'liter';
+    amount: number;
+    unit: string;
+}
+```
+
+---
+
+```typescript
+interface Zero {
+    type: 'human';
+    race: 'yellow';
+    name: 'zero';
+    age: 28;
+}
+
+interface Nero {
+    type: 'human';
+    race: 'yellow';
+    name: 'nero';
+    age: 32;
+}
+```
+
+### 위 코드에서, 공통적인 속성과 값은 type, race입니다. 다른 것은 name과 age이며, 둘은 구조적으로 같습니다. 이 때, 그저 공통적인 인터페이스를 만들어 이렇게 하면 됩니다.
+
+```typescript
+interface Person<N, A> {
+    type: 'human';
+    race: 'yellow';
+    name: N;
+    age: A;
+};
+
+interface Zero extends Person<'zero', 28> {}
+interface Nero extends Person<'nero', 32> {}
+```
+
+### 제네릭 표기는 꺽쇠(<>)로 하며, 인터페이스 이름 바로 뒤에 위치합니다. 이 안에 타입 매개변수(Type Parameter)를 넣으면 됩니다.
+
+### 선언한 제네릭을 사용할 때는, Person<'zero', 28>과 같이 매개변수에 대응하는 실제 타입 인수(Type Argument)를 넣으면 됩니다.
+
+### Array도 제네릭 타입이기에 <> 부분이 있었던 것입니다.
+
+### 제네릭이 없었다면? : 쓸 때마다 이렇게 만들어주어야 합니다.
+
+```typescript
+interface StringArray { . . . }
+interface BooleanArray {.  .. } 
+```
+
+### 인터페이스 뿐만 아니라, 클래스와 타입 별칭, 함수도 제네릭을 가질 수 있습니다.
+
+### 함수에서는 함수 표현식이나 선언문이냐에 따라 제네릭 표기 위치가 다릅니다.
+```typescript
+const 함수이름 = <GN, NG>(name: GN, age: NG) => . . .;
+
+function 함수이름<GN, NG>(name: GN, age: NG) {. . .}
+```
+
+### 제네릭에 기본값도 넣을 수 있습니다.
+
+### 상수 타입 매개변수도 사용 가능합니다.
+
+```typescript
+function values<const T>(initial: T[]) {
+    return {
+        hasValue(value: T) { return initial.includes(value) }
+    };
+}
+
+const savedValues = values(["a", "b", "c"]);
+savedValues.hasValue("x"); // x 할당 불가능 에러
+```
+
+---
+
+### 타입 매개변수에는, 제약을 사용할 수 있습니다.
+```typescript
+interface Example<A extends number, B extends A> {
+    a: A,
+    b: B
+}
+
+type Usecase1 = Example<string, boolean>; // 오류
+type Usecase2 = Example<1, boolean>;
+type Usecase3 = Example<number>;
+```
+
+### 너무 강박적으로 제네릭을 사용할 필요는 없습니다. 그저 필요할 때만 사용하면 됩니다.
+
+---
+
+### 컨디셔널 타입이란, 조건에 따라 다른 타입이 됨을 뜻합니다.
+
+### 여기서도 extends가 사용되는데, 여기의 extends는 삼항연산자와 같이 사용됩니다.
+
+### 특정 타입 extends 다른 타입 ? 참일 때 타입 : 거짓일 때 타입
+
+```typescript
+type A1 = string;
+type B1 = A1 extends string ? number : boolean;
+```
+
+---
+
+### 매핑된 객체 타입에서, 키가 never이면 해당 속성은 제거됩니다. 따라서 다음과 같이 사용할 수 있습니다.
+
+```typescript
+type OmitByType<O, T> = {
+    [K in keyof O as O[K] extends T ? never : K]: O[K];
+};
+
+type Result = OmitByType<
+{
+    name: string;
+    age: number;
+    married: boolean;
+    rich: boolean;
+}, boolean
+>;
+```
+
+### 또는 인덱스 접근 타입으로, 컨디셔널 타입을 표현할 수도 있습니다.
+```typescript
+type A1 = string;
+type B1 = A1 extends string ? number : boolean;
+type B2 = {
+    't': number;
+    'f': boolean;
+}[A1 extends string ? 't' : 'f'];
+```
+
