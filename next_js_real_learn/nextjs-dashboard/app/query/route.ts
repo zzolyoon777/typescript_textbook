@@ -1,17 +1,17 @@
-// import { db } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 
-// const client = await db.connect();
+const sql = neon(`${process.env.DATABASE_URL}`);
 
-// async function listInvoices() {
-// 	const data = await client.sql`
-//     SELECT invoices.amount, customers.name
-//     FROM invoices
-//     JOIN customers ON invoices.customer_id = customers.id
-//     WHERE invoices.amount = 666;
-//   `;
+async function listInvoices() {
+	const data = await sql(`
+    SELECT invoices.amount, customers.name
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE invoices.amount = 666;
+  `);
 
-// 	return data.rows;
-// }
+	return data.keys();
+}
 
 export async function GET() {
   return Response.json({
